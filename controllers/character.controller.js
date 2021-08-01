@@ -1,8 +1,8 @@
 const express = require("express");
 const axios = require("axios");
-const Character = require("../database/models/characters");
+const Character = require("../database/models/character");
 
-const createCharacter = async (req, res) => {
+const createCharacter = async (req, res, next) => {
   const arrCharacter = [];
   try {
     const response = await axios.get(
@@ -24,17 +24,21 @@ const createCharacter = async (req, res) => {
       .then((ch) => res.status(201).json(ch))
       .catch((e) => res.status(401).json(e));
   } catch (error) {
-    console.log(error);
+    res.status(500).json(error);
   }
 };
 
 const getCharacter = async (req, res) => {
   try {
-    await Character.findAll().then((character) => {
-      res.status(200).json({ data: character });
-    });
+    await Character.findAll()
+      .then((character) => {
+        res.status(200).json({ data: character });
+      })
+      .catch((error) => {
+        res.status(401).json(error);
+      });
   } catch (error) {
-    console.log(error);
+    res.status(500).json(error);
   }
 };
 
