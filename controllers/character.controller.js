@@ -2,13 +2,13 @@ const express = require("express");
 const axios = require("axios");
 const Character = require("../database/models/character");
 
-const createCharacter = async (req, res, next) => {
+const createCharacter = async (req, res) => {
   const arrCharacter = [];
+
   try {
     const response = await axios.get(
       "https://api.got.show/api/show/characters"
     );
-
     await response.data.map((d) => {
       arrCharacter.push({
         name: d.name,
@@ -29,8 +29,12 @@ const createCharacter = async (req, res, next) => {
 };
 
 const getCharacter = async (req, res) => {
+  const { limit, offset } = req.params;
   try {
-    await Character.findAll()
+    await Character.findAndCountAll({
+      limit,
+      offset,
+    })
       .then((character) => {
         res.status(200).json({ data: character });
       })
