@@ -6,7 +6,6 @@ const PORT = 3001;
 
 //Middleware
 const app = express();
-const bdCharacters = require("./middleware/characters.middleware");
 app.use(cors());
 app.use(express.json());
 app.use(
@@ -14,7 +13,6 @@ app.use(
     extended: true,
   })
 );
-app.use(bdCharacters);
 
 //Requiere Routes
 const character = require("./routers/character.routes");
